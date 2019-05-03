@@ -22,9 +22,9 @@
         </table>
 
         <div class="table_arrows">
-            <a href="{% if prev_url %}{{ prev_url }}{% else %}"#"{% endif %}">&lt&lt&lt</a>
+            <a href="{% if prev_url %}{{ prev_url }}{% else %}#{% endif %}">&lt&lt&lt</a>
             |
-            <a href="{% if next_url %}{{ next_url }}{% else %}"#"{% endif %}">&gt&gt&gt</a>
+            <a href="{% if next_url %}{{ next_url }}{% else %}#{% endif %}">&gt&gt&gt</a>
         </div>
 
     {% endblock %}
