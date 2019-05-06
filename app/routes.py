@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, redirect, render_template, request, url_for
-from app.forms import ProblemSelectionForm
+from app.forms import LoginForm, ProblemSelectionForm
 from app.models import Problem
 
 app_bp = Blueprint('app_bp', __name__)
@@ -8,9 +8,9 @@ app_bp = Blueprint('app_bp', __name__)
 def index():
 
     # check if routing has come via problem selection form
-    form = ProblemSelectionForm()
-    if form.validate_on_submit():
-        new_page = r'/problem' + str(int(form.problem_selection.data))
+    problem_selection_form = ProblemSelectionForm()
+    if problem_selection_form.validate_on_submit():
+        new_page = r'/problem' + str(int(problem_selection_form.problem_selection.data))
         return redirect(new_page)
 
     # else have navigated directly to home page, or have been redirected
@@ -20,7 +20,8 @@ def index():
     prev_url = url_for('app_bp.index', page=problem_solutions.prev_num) if problem_solutions.has_prev else None
     while len(problem_solutions.items) < current_app.config['SOLUTIONS_TO_SHOW']:
         problem_solutions.items.append(None)
-    return render_template('index.html', form=form,
+    return render_template('index.html', problem_selection_form=problem_selection_form,
+            login_form=LoginForm(),
             problem_solutions=problem_solutions.items,
             next_url=next_url, prev_url=prev_url)
 

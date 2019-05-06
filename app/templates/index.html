@@ -1,37 +1,57 @@
 {% extends "base.html" %}
-    {% block navbar %}
-        <a href="#">Login</a>
-    {% endblock %}
-    {% block body %}
 
-        <h1>Please click on a problem to see its solution (or specify a problem
-            by its number):</h1>
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <p>{{ form.problem_selection() }}</p>
-            <p>{{ form.submit() }}</p>
-        </form>
-
-        <img id="main_image" src="{{ url_for('static', filename='images/maths.jpg') }}">
-
-        <table id="links_table">
-            {% for node in problem_solutions %}
-                {% if node is none %}
-                    <tr class="blank_row"></tr>
-                {% else %}
-                    <tr>
-                        <td>
-                            <a href="problem{{ node.problem_id }}" class="solution_link">Problem{{ node.problem_id }}</a>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
-
-        <div class="table_arrows">
-            <a href="{% if prev_url %}{{ prev_url }}{% else %}#{% endif %}">&lt&lt&lt</a>
-            |
-            <a href="{% if next_url %}{{ next_url }}{% else %}#{% endif %}">&gt&gt&gt</a>
+{% block navbar %}
+    <form action="" method="post">
+        <div class="form-row">
+            {{ login_form.hidden_tag() }}
+            <div class="col-4">
+                {{ login_form.username(class="form-control") }}
+            </div>
+            <div class="col-4">
+                {{ login_form.password(class="form-control") }}
+            </div>
+            <div class="col-4">
+                {{ login_form.submit(class="form-control") }}
+            </div>
         </div>
+    </form>
+{% endblock %}
 
-    {% endblock %}
+{% block body %}
+
+    <h1>Please click on a problem to see its solution (or specify a problem by its number):</h1>
+
+    <form action="" method="post">
+        <div class="form-group row">
+            {{ problem_selection_form.hidden_tag() }}
+            <div class="col-3">
+                <p>{{ problem_selection_form.problem_selection(class="form-control") }}</p>
+            </div>
+            <div class="col-2">
+                <p>{{ problem_selection_form.submit(class="form-control") }}</p>
+            </div>
+        </div>
+    </form>
+
+    <img id="main_image" src="{{ url_for('static', filename='images/maths.jpg') }}">
+
+    <table id="links_table">
+        {% for node in problem_solutions %}
+            {% if node is none %}
+                <tr class="blank_row"></tr>
+            {% else %}
+                <tr>
+                    <td>
+                        <a href="problem{{ node.problem_id }}" class="solution_link">Problem{{ node.problem_id }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    <div class="table_arrows">
+        <a href="{% if prev_url %}{{ prev_url }}{% else %}#{% endif %}">&lt&lt&lt</a>
+        <a href="{% if next_url %}{{ next_url }}{% else %}#{% endif %}">&gt&gt&gt</a>
+    </div>
+
+{% endblock %}
