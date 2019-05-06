@@ -6,9 +6,13 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
     <body style="background-image:url({{ url_for('static', filename='images/background.jpg') }});">        
-        <div id="header_bar"></div>
-        <div id="body-content">
-        {% block body %}{% endblock %}
+        <div class="container-fullwidth">
+            <nav class="navbar navbar-light">
+                {% block navbar %}{% endblock %}
+            </nav>
+            <div id="body-content">
+                {% block body %}{% endblock %}
+            </div>
         </div>
     </body>
 </html>

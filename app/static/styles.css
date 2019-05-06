@@ -2,22 +2,23 @@ body {
     margin-top: 0px;
     margin-left: 0px;
     margin-right: 0px;
+    color: White;
 }
 
-#header_bar {
-   background-color: steelblue;
-   height: 60px; 
-   width: 100%;
-   border-bottom: solid 1px white;
-   margin-bottom: 10px;
+.navbar {
+    background-color: steelblue;
+    height: 60px; 
+    width: 100%;
+    border-bottom: solid 1px white;
+    margin-bottom: 10px;
+}
+
+.navbar > a {
+    color: White;
 }
 
 #body-content {
-    margin-left: 20px;
-}
-
-h1 {
-    color: White;
+    margin-left: 50px;
 }
 
 #main_image {

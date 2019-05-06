@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-    {% block body %}
+    {% block navbar %}
         <a href="{{ url_for('app_bp.index') }}" class="home_link">Return HOME</a>
+    {% endblock %}
+    {% block body %}
         <h1>Solution to problem {{ problem_id }}</h1>
         <pre id=user_code>{{ solution }}</pre>
     {% endblock %}
