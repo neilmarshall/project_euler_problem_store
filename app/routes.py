@@ -1,6 +1,7 @@
-from flask import Blueprint, current_app, g, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, g, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 from app.forms import LoginForm, ProblemSelectionForm
-from app.models import Problem
+from app.models import Problem, User
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -13,6 +14,18 @@ def index():
         new_page = r'/problem' + str(int(problem_selection_form.problem_selection.data))
         return redirect(new_page)
 
+    # check if routing has come via login form
+    login_form=LoginForm()  # note: test user has credentials ('test', 'pass')
+    if login_form.validate_on_submit():
+        username, password = login_form.data.get('username'), login_form.data.get('password')
+        user = User.query.filter_by(username=username).first()
+        if not user or not user.check_password(password):
+            flash('Username not recognised or invalid password provided - please try again')
+            redirect(url_for('app_bp.index'))
+        else:
+            login_user(user)            
+        print(current_user.is_authenticated)
+
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
     problem_solutions = Problem.query.order_by('problem_id').paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
@@ -21,9 +34,10 @@ def index():
     while len(problem_solutions.items) < current_app.config['SOLUTIONS_TO_SHOW']:
         problem_solutions.items.append(None)
     return render_template('index.html', problem_selection_form=problem_selection_form,
-            login_form=LoginForm(),
+            login_form=login_form,
             problem_solutions=problem_solutions.items,
-            next_url=next_url, prev_url=prev_url)
+            next_url=next_url, prev_url=prev_url,
+            authenticated=current_user.is_authenticated)
 
 
 @app_bp.route('/problem<problem_id>')

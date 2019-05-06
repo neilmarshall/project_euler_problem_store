@@ -1,20 +1,30 @@
 {% extends "base.html" %}
 
 {% block navbar %}
-    <form action="" method="post">
-        <div class="form-row">
-            {{ login_form.hidden_tag() }}
-            <div class="col-4">
-                {{ login_form.username(class="form-control") }}
+    {% if authenticated != True %}
+        <form action="" method="post">
+            <p>{{authenticated}}</p>
+            <div class="form-row">
+                {{ login_form.hidden_tag() }}
+                <div class="col-4">
+                    {{ login_form.username(class="form-control") }}
+                </div>
+                <div class="col-4">
+                    {{ login_form.password(class="form-control") }}
+                </div>
+                <div class="col-4">
+                    {{ login_form.submit(class="form-control") }}
+                </div>
+                {% include "message_flasher.html" %}
             </div>
-            <div class="col-4">
-                {{ login_form.password(class="form-control") }}
-            </div>
-            <div class="col-4">
-                {{ login_form.submit(class="form-control") }}
-            </div>
+        </form>
+    {% else %}
+        <div class="btn-toolbar">
+            <button type="button" class="btn btn-light">Logout</a>
+            <button type="button" class="btn btn-light">Create Solution</a>
+            <button type="button" class="btn btn-light">Update Solution</a>
         </div>
-    </form>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -51,6 +61,7 @@
 
     <div class="table_arrows">
         <a href="{% if prev_url %}{{ prev_url }}{% else %}#{% endif %}">&lt&lt&lt</a>
+        |
         <a href="{% if next_url %}{{ next_url }}{% else %}#{% endif %}">&gt&gt&gt</a>
     </div>
 
