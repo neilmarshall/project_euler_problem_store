@@ -16,7 +16,11 @@
                 {% if node is none %}
                     <tr class="blank_row"></tr>
                 {% else %}
-                    <tr><td><a href="problem{{ node.id }}" class="solution_link">Problem{{ node.id }}</a></td></tr>
+                    <tr>
+                        <td>
+                            <a href="problem{{ node.problem_id }}" class="solution_link">Problem{{ node.problem_id }}</a>
+                        </td>
+                    </tr>
                 {% endif %}
             {% endfor %}
         </table>
