@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, g, redirect, render_template, request, url_for
 from app.forms import LoginForm, ProblemSelectionForm
 from app.models import Problem
 
@@ -29,7 +29,7 @@ def index():
 @app_bp.route('/problem<problem_id>')
 def problem_renderer(problem_id):
     solution = Problem.query.filter_by(problem_id=problem_id).first_or_404()
-    return render_template('solution.html', problem_id=problem_id, solution=solution)
+    return render_template('solution.html', problem_id=problem_id, solution=solution.contents)
 
 
 @app_bp.errorhandler(404)
