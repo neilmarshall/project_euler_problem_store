@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, redirect, render_template, request, url_for
 from app.forms import ProblemSelectionForm
-from app.models import Filepaths
+from app.models import Problem
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -20,7 +20,7 @@ def index():
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
-    problem_solutions = Filepaths.query.order_by('id').paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
+    problem_solutions = Problem.query.order_by('id').paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
     next_url = url_for('app_bp.index', page=problem_solutions.next_num) if problem_solutions.has_next else None
     prev_url = url_for('app_bp.index', page=problem_solutions.prev_num) if problem_solutions.has_prev else None
     while len(problem_solutions.items) < current_app.config['SOLUTIONS_TO_SHOW']:
@@ -32,7 +32,7 @@ def index():
 
 @app_bp.route('/problem<problem_id>')
 def problem_renderer(problem_id):
-    path = Filepaths.query.filter_by(id=problem_id).first_or_404()
+    path = Problem.query.filter_by(id=problem_id).first_or_404()
     solution = parse_solution(path.filepath)
     return render_template('solution.html', problem_number=problem_id, solution=solution)
 

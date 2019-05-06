@@ -6,7 +6,6 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 from app.routes import app_bp
-from app import models
 from config import Config
 
 def create_app(config_object=Config):

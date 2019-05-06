@@ -1,10 +1,10 @@
 from app import db
 
-class Filepaths(db.Model):
+class Problem(db.Model):
 
-    __tablename__ = "filepaths"
+    __tablename__ = "problems"
 
-    id = db.Column(db.Integer, primary_key=True)
+    problem_id = db.Column(db.Integer, primary_key=True)
     contents = db.Column(db.Text, nullable=False)
 
     def __repr__(self):

@@ -1,5 +1,5 @@
 from app import create_app, db
-from app.models import Filepaths
+from app.models import Problem
 
 app = create_app()
 
