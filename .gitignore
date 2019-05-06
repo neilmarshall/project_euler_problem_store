@@ -2,5 +2,4 @@ venv/
 __pycache__/
 **/.*.swp
 app/app.db
-app/static/images/*
 app/test_files/
