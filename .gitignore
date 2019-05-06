@@ -3,3 +3,4 @@ __pycache__/
 **/.*.swp
 app/app.db
 app/test_files/
+.env
