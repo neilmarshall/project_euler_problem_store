@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+    {% block navbar %}
+        <a href="{{ url_for('app_bp.index') }}" class="home_link">Return HOME</a>
+    {% endblock %}
+    {% block body %}
+        <form action="" method="post">
+            {{ file_delete_form.hidden_tag() }}
+            <div class="form-group col-6">
+                {{ file_delete_form.problem_selection.label }}
+                {{ file_delete_form.problem_selection(class="form-control") }}
+            </div>
+            <div class="form-group col-6">
+                {{ file_delete_form.submit(class="form-control btn btn-light") }}
+                {% include "message_flasher.html" %}
+            </div>
+        </form>
+    {% endblock %}

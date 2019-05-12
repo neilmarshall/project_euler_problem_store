@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from app import db
-from app.forms import FileUploadForm, LoginForm, ProblemSelectionForm
+from app.forms import FileDeleteForm, FileUploadForm, LoginForm, ProblemSelectionForm
 from app.models import Language, Problem, User
 
 app_bp = Blueprint('app_bp', __name__)
@@ -97,7 +97,16 @@ def update_solution():
     return render_template('404error.html'), 404
 
 
-@app_bp.route('/delete_solution')
+@app_bp.route('/delete_solution', methods=['GET', 'POST'])
 @login_required
-def update_solution():
-    return render_template('404error.html'), 404
+def delete_solution():
+    file_delete_form = FileDeleteForm()
+    if file_delete_form.validate_on_submit():
+        problem_id = file_delete_form.data.get('problem_selection')
+        problem_to_delete = Problem.query.filter_by(problem_id=problem_id).first()
+        if problem_to_delete is None:
+            flash("Solution does not exist - please try again")
+        else:
+            db.session.delete(problem_to_delete)
+            db.session.commit()
+    return render_template('delete_solution.html', file_delete_form=file_delete_form)
