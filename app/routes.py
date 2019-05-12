@@ -1,7 +1,8 @@
-from flask import Blueprint, current_app, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from app.forms import LoginForm, ProblemSelectionForm
-from app.models import Problem, User
+from app import db
+from app.forms import FileUploadForm, LoginForm, ProblemSelectionForm
+from app.models import Language, Problem, User
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -56,13 +57,47 @@ def logout():
     return redirect(url_for('app_bp.index'))
 
 
-@app_bp.route('/create_solution')
+@app_bp.route('/create_solution', methods=['GET', 'POST'])
 @login_required
 def create_solution():
-    return render_template('404error.html'), 404
+    # dynamically load allowed file extensions
+    file_upload_form = FileUploadForm()
+    for extension in db.session.query(Language.extension).all():
+        file_upload_form.allowed_extensions.append(extension[0])
+
+    if file_upload_form.validate_on_submit():
+
+        problem_id = file_upload_form.data.get('problem_selection')
+
+        # check problem_id doesn't already exist
+        if Problem.query.filter_by(problem_id=problem_id).first() is not None:
+            flash('A solution for that problem already exists - please specify an unsolved problem or update the solution')
+
+        else:
+            contents = file_upload_form.file_upload.data.read()
+
+            # check content is not null
+            if not contents:
+                flash("File must not be empty")
+
+            else:
+                extension = file_upload_form.file_upload.data.filename.split('.')[-1]
+                language = Language.query.filter_by(extension=extension).first()
+                language_id = language.language_id
+                problem = Problem(problem_id=problem_id, contents=contents, language_id=language_id)
+                db.session.add(problem)
+                db.session.commit()
+
+    return render_template('create_solution.html', file_upload_form=file_upload_form)
 
 
 @app_bp.route('/update_solution')
+@login_required
+def update_solution():
+    return render_template('404error.html'), 404
+
+
+@app_bp.route('/delete_solution')
 @login_required
 def update_solution():
     return render_template('404error.html'), 404

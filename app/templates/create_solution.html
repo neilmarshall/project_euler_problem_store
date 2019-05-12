@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+    {% block navbar %}
+        <a href="{{ url_for('app_bp.index') }}" class="home_link">Return HOME</a>
+    {% endblock %}
+    {% block body %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ file_upload_form.hidden_tag() }}
+            <div class="form-group col-6">
+                {{ file_upload_form.problem_selection.label }}
+                {{ file_upload_form.problem_selection(class="form-control") }}
+            </div>
+            <div class="form-group col-6">
+                {{ file_upload_form.file_upload.label }}
+                {{ file_upload_form.file_upload(class="form-control") }}
+            </div>
+            <div class="form-group col-6">
+                {{ file_upload_form.submit(class="form-control btn btn-light") }}
+                {% include "message_flasher.html" %}
+            </div>
+        </form>
+    {% endblock %}
