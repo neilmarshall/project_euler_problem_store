@@ -21,10 +21,9 @@ def index():
         user = User.query.filter_by(username=username).first()
         if not user or not user.check_password(password):
             flash('Username not recognised or invalid password provided - please try again')
-            redirect(url_for('app_bp.index'))
+            return redirect(url_for('app_bp.index'))
         else:
             login_user(user)            
-        print(current_user.is_authenticated)
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
@@ -48,4 +47,22 @@ def problem_renderer(problem_id):
 
 @app_bp.errorhandler(404)
 def page_not_found_error(error):
+    return render_template('404error.html'), 404
+
+
+@app_bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('app_bp.index'))
+
+
+@app_bp.route('/create_solution')
+@login_required
+def create_solution():
+    return render_template('404error.html'), 404
+
+
+@app_bp.route('/update_solution')
+@login_required
+def update_solution():
     return render_template('404error.html'), 404
