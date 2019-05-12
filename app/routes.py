@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from app import db
-from app.forms import FileDeleteForm, FileUploadForm, LoginForm, ProblemSelectionForm
+from app.forms import FileDeleteForm, FileUpdateForm, FileUploadForm, LoginForm, ProblemSelectionForm
 from app.models import Language, Problem, User
 
 app_bp = Blueprint('app_bp', __name__)
@@ -91,10 +91,32 @@ def create_solution():
     return render_template('create_solution.html', file_upload_form=file_upload_form)
 
 
-@app_bp.route('/update_solution')
+@app_bp.route('/update_solution', methods=['GET', 'POST'])
 @login_required
 def update_solution():
-    return render_template('404error.html'), 404
+    # dynamically load allowed file extensions
+    file_update_form = FileUpdateForm()
+    for extension in db.session.query(Language.extension).all():
+        file_update_form.allowed_extensions.append(extension[0])
+
+    if file_update_form.validate_on_submit():
+        problem_id = file_update_form.data.get('problem_selection')
+        problem_to_update = Problem.query.filter_by(problem_id=problem_id).first()
+        if problem_to_update is None:
+            flash("Solution does not exist - please try again")
+        else:
+            contents = file_update_form.file_update.data.read()
+
+            # check content is not null
+            if not contents:
+                flash("File must not be empty")
+
+            else:
+                pass
+                problem_to_update.contents = contents
+                db.session.commit()
+
+    return render_template('update_solution.html', file_update_form=file_update_form)
 
 
 @app_bp.route('/delete_solution', methods=['GET', 'POST'])
