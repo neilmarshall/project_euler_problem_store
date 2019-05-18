@@ -112,8 +112,11 @@ def update_solution():
                 flash("File must not be empty")
 
             else:
-                pass
+                extension = file_update_form.file_upload.data.filename.split('.')[-1]
+                language = Language.query.filter_by(extension=extension).first()
+                language_id = language.language_id
                 problem_to_update.contents = contents
+                problem_to_update.language_id = language_id
                 db.session.commit()
 
     return render_template('update_solution.html', file_update_form=file_update_form)
