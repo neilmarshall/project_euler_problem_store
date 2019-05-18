@@ -112,7 +112,7 @@ def update_solution():
                 flash("File must not be empty")
 
             else:
-                extension = file_update_form.file_upload.data.filename.split('.')[-1]
+                extension = file_update_form.file_update.data.filename.split('.')[-1]
                 language = Language.query.filter_by(extension=extension).first()
                 language_id = language.language_id
                 problem_to_update.contents = contents
