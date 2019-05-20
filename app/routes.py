@@ -21,7 +21,7 @@ def index():
         username, password = login_form.data.get('username'), login_form.data.get('password')
         user = User.query.filter_by(username=username).first()
         if not user or not user.check_password(password):
-            flash('Username not recognised or invalid password provided')
+            flash('Username not recognised or invalid password provided - please try again')
             return redirect(url_for('app_bp.index'))
         else:
             login_user(user)            
