@@ -13,10 +13,6 @@ body {
     margin-bottom: 10px;
 }
 
-.navbar > a {
-    color: White;
-}
-
 #body-content {
     margin-left: 50px;
 }
@@ -39,10 +35,6 @@ body {
 }
 
 .solution_link {
-    color: White;
-}
-
-.home_link {
     color: White;
 }
 
