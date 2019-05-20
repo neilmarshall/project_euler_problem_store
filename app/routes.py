@@ -16,7 +16,7 @@ def index():
         return redirect(new_page)
 
     # check if routing has come via login form
-    login_form=LoginForm()  # note: test user has credentials ('test', 'pass')
+    login_form = LoginForm()  # note: test user has credentials ('test', 'pass')
     if login_form.validate_on_submit():
         username, password = login_form.data.get('username'), login_form.data.get('password')
         user = User.query.filter_by(username=username).first()
