@@ -12,7 +12,7 @@ class Problem(db.Model):
     language_id = db.Column(db.Integer, db.ForeignKey('languages.language_id'), nullable=False)
 
     def __repr__(self):
-        return f"Problem(problem_id={self.problem_id}, contents={self.contents}, language_id={self.language})"
+        return f"Problem(problem_id={self.problem_id}, contents='{self.contents}', language_id={self.language_id})"
 
 
 class Language(db.Model):
@@ -24,7 +24,7 @@ class Language(db.Model):
     extension = db.Column(db.String(16), nullable=False)
 
     def __repr__(self):
-        return f"Languages(language_id={self.language_id}, language={self.language}, extension={self.extension})"
+        return f"Languages(language_id={self.language_id}, language='{self.language}', extension='{self.extension}')"
 
 
 class User(UserMixin, db.Model):
@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
-        return f"User(id={self.id}, username={self.username})"
+        return f"User(id={self.id}, username='{self.username}')"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
