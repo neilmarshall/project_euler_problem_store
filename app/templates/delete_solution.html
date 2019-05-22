@@ -11,7 +11,12 @@
             </div>
             <div class="form-group col-6">
                 {{ file_delete_form.submit(class="form-control btn btn-light") }}
-                {% include "message_flasher.html" %}
+                {% with category="warning" %}
+                    {% include "message_flasher.html" %}
+                {% endwith %}
+                {% with category="success" %}
+                    {% include "message_flasher.html" %}
+                {% endwith %}
             </div>
         </form>
     {% endblock %}

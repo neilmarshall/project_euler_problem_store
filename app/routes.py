@@ -21,7 +21,7 @@ def index():
         username, password = login_form.data.get('username'), login_form.data.get('password')
         user = User.query.filter_by(username=username).first()
         if not user or not user.check_password(password):
-            flash('Username not recognised or invalid password provided - please try again')
+            flash("Username not recognised or invalid password provided - please try again", "danger")
             return redirect(url_for('app_bp.index'))
         else:
             login_user(user)            
@@ -44,7 +44,7 @@ def index():
 def problem_renderer(problem_id):
     solution = Problem.query.filter_by(problem_id=problem_id).first()
     if solution is None:
-        flash("Solution does not exist - please try again")
+        flash("Solution does not exist - please try again", "warning")
         return redirect(url_for('app_bp.index'))
     return render_template('solution.html', problem_id=problem_id, solution=solution.contents)
 
@@ -69,7 +69,7 @@ def create_solution():
 
         # check problem_id doesn't already exist
         if Problem.query.filter_by(problem_id=problem_id).first() is not None:
-            flash('A solution for that problem already exists - please specify an unsolved problem or update the solution')
+            flash("A solution for that problem already exists - please specify an unsolved problem or update the solution", "warning")
 
         else:
             contents = file_upload_form.file_upload.data.read()
@@ -77,7 +77,7 @@ def create_solution():
 
             # check content is not null
             if not contents:
-                flash("File must not be empty")
+                flash("File must not be empty", "warning")
 
             else:
                 extension = file_upload_form.file_upload.data.filename.split('.')[-1]
@@ -86,7 +86,7 @@ def create_solution():
                 problem = Problem(problem_id=problem_id, contents=contents, language_id=language_id)
                 db.session.add(problem)
                 db.session.commit()
-                flash("Solution created")
+                flash("Solution created", "success")
 
     return render_template('create_solution.html', file_upload_form=file_upload_form)
 
@@ -103,14 +103,14 @@ def update_solution():
         problem_id = file_update_form.data.get('problem_selection')
         problem_to_update = Problem.query.filter_by(problem_id=problem_id).first()
         if problem_to_update is None:
-            flash("Solution does not exist - please try again")
+            flash("Solution does not exist - please try again", "warning")
         else:
             contents = file_update_form.file_update.data.read()
             contents = contents.decode('utf-8').replace('\r\n', '\n')
 
             # check content is not null
             if not contents:
-                flash("File must not be empty")
+                flash("File must not be empty", "warning")
 
             else:
                 extension = file_update_form.file_update.data.filename.split('.')[-1]
@@ -119,7 +119,7 @@ def update_solution():
                 problem_to_update.contents = contents
                 problem_to_update.language_id = language_id
                 db.session.commit()
-                flash("Solution updated")
+                flash("Solution updated", "success")
 
     return render_template('update_solution.html', file_update_form=file_update_form)
 
@@ -132,9 +132,9 @@ def delete_solution():
         problem_id = file_delete_form.data.get('problem_selection')
         problem_to_delete = Problem.query.filter_by(problem_id=problem_id).first()
         if problem_to_delete is None:
-            flash("Solution does not exist - please try again")
+            flash("Solution does not exist - please try again", "warning")
         else:
             db.session.delete(problem_to_delete)
             db.session.commit()
-            flash("Solution deleted")
+            flash("Solution deleted", "success")
     return render_template('delete_solution.html', file_delete_form=file_delete_form)

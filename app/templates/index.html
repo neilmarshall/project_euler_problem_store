@@ -14,7 +14,9 @@
                 <div class="col-4">
                     {{ login_form.submit(class="form-control btn btn-light") }}
                 </div>
-                {% include "message_flasher.html" %}
+                {% with category="danger" %}
+                    {% include "message_flasher.html" %}
+                {% endwith %}
             </div>
         </form>
     {% else %}
@@ -40,7 +42,9 @@
             <div class="col-2">
                {{ problem_selection_form.submit(class="form-control btn btn-light") }}
             </div>
-            {% include "message_flasher.html" %}
+            {% with category="warning" %}
+                {% include "message_flasher.html" %}
+            {% endwith %}
         </div>
     </form>
 
