@@ -75,6 +75,7 @@ def create_solution():
 
         else:
             contents = file_upload_form.file_upload.data.read()
+            contents = contents.decode('utf-8').replace('\r\n', '\n')
 
             # check content is not null
             if not contents:
@@ -106,6 +107,7 @@ def update_solution():
             flash("Solution does not exist - please try again")
         else:
             contents = file_update_form.file_update.data.read()
+            contents = contents.decode('utf-8').replace('\r\n', '\n')
 
             # check content is not null
             if not contents:
