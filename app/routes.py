@@ -88,6 +88,7 @@ def create_solution():
                 problem = Problem(problem_id=problem_id, contents=contents, language_id=language_id)
                 db.session.add(problem)
                 db.session.commit()
+                flash("Solution created")
 
     return render_template('create_solution.html', file_upload_form=file_upload_form)
 
@@ -120,6 +121,7 @@ def update_solution():
                 problem_to_update.contents = contents
                 problem_to_update.language_id = language_id
                 db.session.commit()
+                flash("Solution updated")
 
     return render_template('update_solution.html', file_update_form=file_update_form)
 
@@ -136,4 +138,5 @@ def delete_solution():
         else:
             db.session.delete(problem_to_delete)
             db.session.commit()
+            flash("Solution deleted")
     return render_template('delete_solution.html', file_delete_form=file_delete_form)
