@@ -12,8 +12,8 @@ def index():
     # check if routing has come via problem selection form
     problem_selection_form = ProblemSelectionForm()
     if problem_selection_form.validate_on_submit():
-        new_page = r'/problem' + str(int(problem_selection_form.problem_selection.data))
-        return redirect(new_page)
+        problem_id = str(int(problem_selection_form.problem_selection.data))
+        return redirect(url_for('app_bp.problem_renderer', problem_id=problem_id))
 
     # check if routing has come via login form
     login_form = LoginForm()  # note: test user has credentials ('test', 'pass')
@@ -42,13 +42,11 @@ def index():
 
 @app_bp.route('/problem<problem_id>')
 def problem_renderer(problem_id):
-    solution = Problem.query.filter_by(problem_id=problem_id).first_or_404()
+    solution = Problem.query.filter_by(problem_id=problem_id).first()
+    if solution is None:
+        flash("Solution does not exist - please try again")
+        return redirect(url_for('app_bp.index'))
     return render_template('solution.html', problem_id=problem_id, solution=solution.contents)
-
-
-@app_bp.errorhandler(404)
-def page_not_found_error(error):
-    return render_template('404error.html'), 404
 
 
 @app_bp.route('/logout')

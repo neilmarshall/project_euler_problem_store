@@ -3,6 +3,11 @@ body {
     margin-left: 0px;
     margin-right: 0px;
     color: White;
+    font-family: garamond;
+}
+
+pre {
+    font-family: courier;
 }
 
 .navbar {
@@ -36,6 +41,10 @@ body {
 
 .solution_link {
     color: White;
+}
+
+.solution_link:hover {
+    color: grey;
 }
 
 .table_arrows {

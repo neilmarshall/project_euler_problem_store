@@ -29,17 +29,18 @@
 
 {% block body %}
 
-    <h1>Please click on a problem to see its solution (or specify a problem by its number):</h1>
+    <h1>Please click on a problem to see its solution, or specify a problem by its number</h1>
 
     <form action="" method="post">
         <div class="form-group row">
             {{ problem_selection_form.hidden_tag() }}
             <div class="col-2">
-                <p>{{ problem_selection_form.problem_selection(class="form-control") }}</p>
+                {{ problem_selection_form.problem_selection(class="form-control") }}
             </div>
             <div class="col-2">
-                <p>{{ problem_selection_form.submit(class="form-control btn btn-light") }}</p>
+               {{ problem_selection_form.submit(class="form-control btn btn-light") }}
             </div>
+            {% include "message_flasher.html" %}
         </div>
     </form>
 
