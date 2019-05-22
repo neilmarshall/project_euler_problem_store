@@ -12,8 +12,8 @@ def index():
     # check if routing has come via problem selection form
     problem_selection_form = ProblemSelectionForm()
     if problem_selection_form.validate_on_submit():
-        new_page = r'/problem' + str(int(problem_selection_form.problem_selection.data))
-        return redirect(new_page)
+        problem_id = str(int(problem_selection_form.problem_selection.data))
+        return redirect(url_for('app_bp.problem_renderer', problem_id=problem_id))
 
     # check if routing has come via login form
     login_form = LoginForm()  # note: test user has credentials ('test', 'pass')
