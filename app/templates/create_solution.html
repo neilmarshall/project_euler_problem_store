@@ -14,7 +14,10 @@
                 {{ file_upload_form.file_upload(class="form-control") }}
             </div>
             <div class="form-group col-6">
-                {{ file_upload_form.submit(class="form-control btn btn-light") }}
+                <button class="form-control btn btn-light">
+                    <span class="oi oi-cloud-upload" /span>
+                    Create Solution
+                </button>
                 {% with category="warning" %}
                     {% include "message_flasher.html" %}
                 {% endwith %}

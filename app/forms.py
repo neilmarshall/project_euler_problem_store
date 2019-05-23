@@ -21,7 +21,6 @@ class FileUploadForm(FlaskForm):
              validators=[DataRequired(), NumberRange(min=1)])
     file_upload = FileField("Choose a file:",
             validators=[FileRequired(), FileAllowed(allowed_extensions)])
-    submit = SubmitField('Upload Solution')
 
 
 class FileUpdateForm(FlaskForm):
@@ -29,7 +28,6 @@ class FileUpdateForm(FlaskForm):
     problem_selection = IntegerField("Specify solution:", validators=[DataRequired(), NumberRange(min=1)])
     file_update = FileField("Choose a file:",
                             validators=[FileRequired(), FileAllowed(allowed_extensions)])
-    submit = SubmitField('Update Solution')
 
 
 class FileDeleteForm(FlaskForm):
