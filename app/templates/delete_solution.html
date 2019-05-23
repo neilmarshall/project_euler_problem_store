@@ -10,7 +10,10 @@
                 {{ file_delete_form.problem_selection(class="form-control") }}
             </div>
             <div class="form-group col-6">
-                {{ file_delete_form.submit(class="form-control btn btn-light") }}
+                <button class="form-control btn btn-light">
+                    <span class="oi oi-trash" /span>
+                    Delete Solution
+                </button>
                 {% with category="warning" %}
                     {% include "message_flasher.html" %}
                 {% endwith %}

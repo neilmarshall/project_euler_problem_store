@@ -34,4 +34,3 @@ class FileUpdateForm(FlaskForm):
 
 class FileDeleteForm(FlaskForm):
     problem_selection = IntegerField("Specify solution:", validators=[DataRequired(), NumberRange(min=1)])
-    submit = SubmitField('Delete Solution')
