@@ -27,6 +27,18 @@
             <a href="{{ url_for('app_bp.delete_solution') }}" class="btn btn-light">Delete Solution</a>
         </div>
     {% endif %}
+
+    <form action="/search" method="get">
+        <div class="form-row">
+            {{ login_form.hidden_tag() }}
+            <div class="col-6">
+                <input type="text" name="search_for" class="form-control">
+            </div>
+            <div class="col-6">
+                <input type="submit" class="form-control" value="Search problems">
+            </div>
+        </div>
+    </form>
 {% endblock %}
 
 {% block body %}
