@@ -31,7 +31,8 @@ class TestSearchQueryFunctionality(unittest.TestCase):
         # add a Problem object
         self.problem1 = Problem(contents="arbitrary solution to problem1", language_id=self.language.language_id)
         self.problem2 = Problem(contents="arbitrary solution to problem2", language_id=self.language.language_id)
-        db.session.add_all((self.problem1, self.problem2))
+        self.problem3 = Problem(contents="arbitrary [ ] to problem3", language_id=self.language.language_id)
+        db.session.add_all((self.problem1, self.problem2, self.problem3))
 
         db.session.commit()
 
@@ -56,4 +57,6 @@ class TestSearchQueryFunctionality(unittest.TestCase):
         response = self.test_client.get('/search', follow_redirects=True,
                                         query_string={'search_for': 'solution'})
         self.assertEqual(response.status_code, 200)
-        self.fail("test body of page required")
+        self.assertTrue(b"Problem1" in response.data)
+        self.assertTrue(b"Problem2" in response.data)
+        self.assertFalse(b"Problem3" in response.data)

@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 
 {% block navbar %}
-    <h1>NAVBAR CONTENT TO BE ADDED</h1>
+    <a href="{{ url_for('app_bp.index') }}" class="btn btn-light">Home</a>
 {% endblock %}
 
 {% block body %}
-    <h1>BODY CONTENT TO BE ADDED</h1>
+    <h1>
+        Solutions found containing phrases like '{{ search_for }}':
+    </h1>
+
+    <table id="links_table">
+        {% for node in search_results %}
+            <tr>
+                <td>
+                    <a href="problem{{ node }}" class="solution_link">Problem{{ node }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
