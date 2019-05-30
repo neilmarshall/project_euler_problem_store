@@ -7,8 +7,8 @@ db = SQLAlchemy()
 login = LoginManager()
 migrate = Migrate()
 
-from app.routes import app_bp
-from app.search_route import search_bp
+from app.views.index_route import app_bp
+from app.views.search_route import search_bp
 
 from config import Config
 
