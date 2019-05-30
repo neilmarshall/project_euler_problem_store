@@ -50,7 +50,7 @@ class TestSearchQueryFunctionality(unittest.TestCase):
         response = self.test_client.get('/search', follow_redirects=True,
                                         query_string={'search_for': 'missing phrase'})
         self.assertEqual(response.status_code, 200)
-        self.fail("test body of page required")
+        self.assertTrue(b"Sorry - No solutions found containing phrases like 'missing phrase'" in response.data)
 
     def test_searching_with_query_in_problems_returns_search_results_page(self):
         response = self.test_client.get('/search', follow_redirects=True,

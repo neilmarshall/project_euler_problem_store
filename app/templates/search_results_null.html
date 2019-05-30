@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block navbar %}
-    <h1>NAVBAR CONTENT TO BE ADDED</h1>
+    <a href="{{ url_for('app_bp.index') }}" class="btn btn-light">Home</a>
 {% endblock %}
 
 {% block body %}
-    <h1>BODY CONTENT TO BE ADDED</h1>
+    <div class="error404">
+        <h1>
+            Sorry - No solutions found containing phrases like '{{ search_for }}'
+        </h1>
+    </div>
 {% endblock %}

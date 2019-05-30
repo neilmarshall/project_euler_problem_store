@@ -19,7 +19,8 @@ def search_router():
     search_results = [result[0] for result in search_results]
 
     if not search_results:
-        return render_template('search_results_null.html')
+        return render_template('search_results_null.html',
+                               search_for=search_for)
 
     return render_template('search_results.html',
                            search_results=search_results,
