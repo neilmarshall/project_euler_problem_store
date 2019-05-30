@@ -7,6 +7,7 @@ from app.models import Language, Problem, User
 app_bp = Blueprint('app_bp', __name__)
 
 @app_bp.route('/', methods=['GET', 'POST'])
+@app_bp.route('/index', methods=['GET', 'POST'])
 def index():
 
     # check if routing has come via problem selection form

@@ -1,7 +1,6 @@
 import unittest
 
-from app import create_app, db
-from app.models import Language, Problem, User
+from app import create_app
 
 class TestConfig():
     SECRET_KEY = "123456"
@@ -22,7 +21,6 @@ class TestLandingPage(unittest.TestCase):
         self.test_client = self.app.test_client()
 
     def tearDown(self):
-        db.drop_all()
         self.app_context.pop()
 
     def test_accessing_create_solution_page_without_logging_in_returns_status_code_401(self):
