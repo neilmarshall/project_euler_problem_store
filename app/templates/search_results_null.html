@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+    <a href="{{ url_for('app_bp.index') }}" class="btn btn-light">Home</a>
+{% endblock %}
+
+{% block body %}
+    <div class="search-results-null">
+        <h1>
+            Sorry - No solutions found containing phrases like '{{ search_for }}'
+        </h1>
+    </div>
+{% endblock %}
