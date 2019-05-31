@@ -13,7 +13,9 @@
         {% for node in search_results %}
             <tr>
                 <td>
-                    <a href="problem{{ node }}" class="solution_link">Problem{{ node }}</a>
+                    <a href="problem{{ node.problem_id }}" class="solution_link">
+                        Problem{{ node.problem_id }} - {{ node.title }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

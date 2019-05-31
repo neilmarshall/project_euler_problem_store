@@ -12,11 +12,9 @@ def search_router():
         return redirect(url_for('app_bp.index'))
 
     search_results = db.session \
-                       .query(Problem.problem_id) \
+                       .query(Problem) \
                        .filter(Problem.contents.ilike(f'%{search_for}%')) \
                        .all()
-
-    search_results = [result[0] for result in search_results]
 
     if not search_results:
         return render_template('search_results_null.html',
