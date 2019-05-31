@@ -8,11 +8,13 @@ class Problem(db.Model):
     __tablename__ = "problems"
 
     problem_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=True)
     contents = db.Column(db.Text, nullable=False)
     language_id = db.Column(db.Integer, db.ForeignKey('languages.language_id'), nullable=False)
 
     def __repr__(self):
-        return f"Problem(problem_id={self.problem_id}, contents='{self.contents}', language_id={self.language_id})"
+        return f"Problem(problem_id={self.problem_id}, title='{self.title}', " + \
+               f"contents='{self.contents}', language_id={self.language_id})"
 
 
 class Language(db.Model):
@@ -24,7 +26,8 @@ class Language(db.Model):
     extension = db.Column(db.String(16), nullable=False)
 
     def __repr__(self):
-        return f"Languages(language_id={self.language_id}, language='{self.language}', extension='{self.extension}')"
+        return f"Languages(language_id={self.language_id}, language='{self.language}', " + \
+               f"extension='{self.extension}')"
 
 
 class User(UserMixin, db.Model):
