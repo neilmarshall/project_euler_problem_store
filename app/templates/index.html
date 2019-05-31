@@ -71,7 +71,9 @@
             {% else %}
                 <tr>
                     <td>
-                        <a href="problem{{ node.problem_id }}" class="solution_link">Problem{{ node.problem_id }}</a>
+                        <a href="problem{{ node.problem_id }}" class="solution_link">
+                            Problem{{ node.problem_id }} - {{ node.title}}
+                        </a>
                     </td>
                 </tr>
             {% endif %}
