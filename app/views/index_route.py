@@ -43,11 +43,13 @@ def index():
 
 @app_bp.route('/problem<problem_id>')
 def problem_renderer(problem_id):
+    from_search = request.args.get('from_search') is not None and request.args['from_search'] == "true"
     solution = Problem.query.filter_by(problem_id=problem_id).first()
     if solution is None:
         flash("Solution does not exist - please try again", "warning")
         return redirect(url_for('app_bp.index'))
-    return render_template('solution.html', problem_id=problem_id, solution=solution.contents)
+    return render_template('solution.html', problem_id=problem_id,
+            solution=solution.contents, from_search=from_search)
 
 
 @app_bp.route('/logout')
