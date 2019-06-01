@@ -110,6 +110,7 @@ def update_solution():
         if problem_to_update is None:
             flash("Solution does not exist - please try again", "warning")
         else:
+            title = file_update_form.data.get('problem_title')
             contents = file_update_form.file_update.data.read()
             contents = contents.decode('utf-8').replace('\r\n', '\n')
 
@@ -123,6 +124,8 @@ def update_solution():
                 language_id = language.language_id
                 problem_to_update.contents = contents
                 problem_to_update.language_id = language_id
+                if title:
+                    problem_to_update.title = title
                 db.session.commit()
                 flash("Solution updated", "success")
 
