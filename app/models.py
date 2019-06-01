@@ -8,7 +8,7 @@ class Problem(db.Model):
     __tablename__ = "problems"
 
     problem_id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=True)
+    title = db.Column(db.String(255), nullable=False)
     contents = db.Column(db.Text, nullable=False)
     language_id = db.Column(db.Integer, db.ForeignKey('languages.language_id'), nullable=False)
 
