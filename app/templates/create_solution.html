@@ -10,6 +10,10 @@
                 {{ file_upload_form.problem_selection(class="form-control") }}
             </div>
             <div class="form-group col-6">
+                {{ file_upload_form.problem_title.label }}
+                {{ file_upload_form.problem_title(class="form-control") }}
+            </div>
+            <div class="form-group col-6">
                 {{ file_upload_form.file_upload.label }}
                 {{ file_upload_form.file_upload(class="form-control") }}
             </div>

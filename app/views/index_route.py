@@ -75,6 +75,7 @@ def create_solution():
             flash("A solution for that problem already exists - please specify an unsolved problem or update the solution", "warning")
 
         else:
+            title = file_upload_form.data.get('problem_title')
             contents = file_upload_form.file_upload.data.read()
             contents = contents.decode('utf-8').replace('\r\n', '\n')
 
@@ -86,7 +87,8 @@ def create_solution():
                 extension = file_upload_form.file_upload.data.filename.split('.')[-1]
                 language = Language.query.filter_by(extension=extension).first()
                 language_id = language.language_id
-                problem = Problem(problem_id=problem_id, contents=contents, language_id=language_id)
+                problem = Problem(problem_id=problem_id, contents=contents,
+                        language_id=language_id, title=title)
                 db.session.add(problem)
                 db.session.commit()
                 flash("Solution created", "success")

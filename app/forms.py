@@ -19,6 +19,7 @@ class FileUploadForm(FlaskForm):
     allowed_extensions = []
     problem_selection = IntegerField("Specify solution:",
              validators=[DataRequired(), NumberRange(min=1)])
+    problem_title = StringField("Title:", validators=[DataRequired()])
     file_upload = FileField("Choose a file:",
             validators=[FileRequired(), FileAllowed(allowed_extensions)])
 
