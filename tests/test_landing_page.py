@@ -39,7 +39,8 @@ class TestLandingPage(unittest.TestCase):
         db.session.add(self.language)
 
         # add a Problem object
-        self.problem = Problem(contents="arbitrary solution to problem", language_id=self.language.language_id)
+        self.problem = Problem(contents="arbitrary solution to problem",
+                language_id=self.language.language_id, title="arbitrary")
         db.session.add(self.problem)
 
         db.session.commit()

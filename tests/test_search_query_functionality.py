@@ -29,9 +29,12 @@ class TestSearchQueryFunctionality(unittest.TestCase):
         db.session.add(self.language)
 
         # add a Problem object
-        self.problem1 = Problem(contents="arbitrary solution to problem1", language_id=self.language.language_id)
-        self.problem2 = Problem(contents="arbitrary solution to problem2", language_id=self.language.language_id)
-        self.problem3 = Problem(contents="arbitrary [ ] to problem3", language_id=self.language.language_id)
+        self.problem1 = Problem(contents="arbitrary solution to problem1",
+                language_id=self.language.language_id, title="problem1")
+        self.problem2 = Problem(contents="arbitrary solution to problem2",
+                language_id=self.language.language_id, title="problem2")
+        self.problem3 = Problem(contents="arbitrary [ ] to problem3",
+                language_id=self.language.language_id, title="problem3")
         db.session.add_all((self.problem1, self.problem2, self.problem3))
 
         db.session.commit()
