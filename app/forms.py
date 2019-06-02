@@ -10,8 +10,7 @@ class ProblemSelectionForm(FlaskForm):
 
 
 class LanguageFilterForm(FlaskForm):
-    language_filter = SelectField()
-    submit = SubmitField('Filter languages')
+    language_filter = SelectField('Filter by language:')
 
 
 class LoginForm(FlaskForm):
