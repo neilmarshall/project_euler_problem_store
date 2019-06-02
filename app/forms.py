@@ -1,12 +1,16 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms import IntegerField, PasswordField, StringField, SubmitField
+from wtforms import IntegerField, PasswordField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
 class ProblemSelectionForm(FlaskForm):
     problem_selection = IntegerField("Select problem:",
                 validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Select Problem')
+
+
+class LanguageFilterForm(FlaskForm):
+    language_filter = SelectField('Filter by language:')
 
 
 class LoginForm(FlaskForm):
