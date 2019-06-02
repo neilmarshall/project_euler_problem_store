@@ -9,7 +9,6 @@ app_bp = Blueprint('app_bp', __name__)
 @app_bp.route('/', methods=['GET', 'POST'])
 @app_bp.route('/index', methods=['GET', 'POST'])
 def index():
-
     # check if routing has come via problem selection form
     problem_selection_form = ProblemSelectionForm()
     if problem_selection_form.validate_on_submit():
@@ -29,25 +28,35 @@ def index():
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
-    problem_solutions = Problem.query.order_by('problem_id').paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
+    language_filter = int(request.args.get('language_filter', 0))
+    if language_filter:
+        problem_solutions = Problem.query.filter_by(language_id=language_filter) \
+                                         .order_by('problem_id') \
+                                         .paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
+    else:
+        problem_solutions = Problem.query \
+                                   .order_by('problem_id') \
+                                   .paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
     next_url = url_for('app_bp.index', page=problem_solutions.next_num) if problem_solutions.has_next else None
     prev_url = url_for('app_bp.index', page=problem_solutions.prev_num) if problem_solutions.has_prev else None
     while len(problem_solutions.items) < current_app.config['SOLUTIONS_TO_SHOW']:
         problem_solutions.items.append(None)
     return render_template('index.html', problem_selection_form=problem_selection_form,
-            language_filter_form=build_language_filter_form(),
+            language_filter_form=build_language_filter_form(language_filter),
             login_form=login_form,
             problem_solutions=problem_solutions.items,
             next_url=next_url, prev_url=prev_url,
             authenticated=current_user.is_authenticated)
 
 
-def build_language_filter_form():
-    choices = [(None, "No filter")]
+def build_language_filter_form(language_filter):
+    choices = [(0, "No filter")]
     for id, language in db.session.query(Language.language_id, Language.language).distinct():
         choices.append((id, language))
     language_filter_form = LanguageFilterForm()
     language_filter_form.language_filter.choices = choices
+    language_filter_form.language_filter.default = language_filter
+    language_filter_form.process()
     return language_filter_form
 
 
