@@ -62,14 +62,16 @@
         </div>
     </form>
 
-    <div class="form-group">
-        <div class="col-2">
-            {{ language_filter_form.language_filter.label }}
+    <form action="">
+        <div class="form-group row">
+            <div class="col-2">
+                {{ language_filter_form.language_filter(class="form-control") }}
+            </div>
+            <div class="col-2">
+               {{ language_filter_form.submit(class="form-control btn btn-light") }}
+            </div>
         </div>
-        <div class="col-2">
-            {{ language_filter_form.language_filter(class="form-control") }}
-        </div>
-    </div>
+    </form>
 
     <img id="main_image" src="{{ url_for('static', filename='images/maths.jpg') }}">
 
