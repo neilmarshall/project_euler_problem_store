@@ -25,7 +25,7 @@ def index():
             flash("Username not recognised or invalid password provided - please try again", "danger")
             return redirect(url_for('app_bp.index'))
         else:
-            login_user(user)            
+            login_user(user, remember=True)
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
