@@ -48,49 +48,49 @@ class TestPagination(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_initial_page_has_correct_number_of_links(self):
+    def test_first_page_has_correct_links(self):
         response = self.test_client.get('/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, 'html.parser')
-        rows = soup.find(id='links_table').find_all('tr')
-        self.assertEqual(len(rows), TestConfig.SOLUTIONS_TO_SHOW)
+        contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
+        self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
+        self.assertEqual(contents, [f'Problem{i} - title' for i in range(1, TestConfig.SOLUTIONS_TO_SHOW + 1)])
 
-    @unittest.skip('tbc')
-    def test_accessing_landing_page_returns_status_code_200(self):
-        response = self.test_client.get('/', follow_redirects=True)
+    def test_second_page_has_correct_links(self):
+        response = self.test_client.get('/?page=2')
         self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
+        self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
+        self.assertEqual(contents, [f'Problem{i} - title' for i in range(TestConfig.SOLUTIONS_TO_SHOW + 1, TestConfig.SOLUTIONS_TO_SHOW * 2 + 1)])
 
-    @unittest.skip('tbc')
-    def test_logging_on_with_incorrect_username_redirects_correctly(self):
-        data = {'username': 'incorrect_user', 'password': 'pass1'}
-        response = self.test_client.post('/', data=data, follow_redirects=True)
+    def test_html_from_first_page_next_link_has_correct_links(self):
+        response = self.test_client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(b'Username not recognised or invalid password provided - please try again' in response.data)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        next_link = soup.find(id="next_link")["href"]
+        response = self.test_client.get(next_link)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
+        self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
+        self.assertEqual(contents, [f'Problem{i} - title' for i in range(TestConfig.SOLUTIONS_TO_SHOW + 1, TestConfig.SOLUTIONS_TO_SHOW * 2 + 1)])
 
-    @unittest.skip('tbc')
-    def test_logging_on_with_incorrect_password_redirects_correctly(self):
-        data = {'username': 'user1', 'password': 'incorrect_password'}
-        response = self.test_client.post('/', data=data, follow_redirects=True)
+    def test_first_page_with_language_filter_has_correct_links(self):
+        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(b'Username not recognised or invalid password provided - please try again' in response.data)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
+        self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
+        self.assertEqual(contents, [f'Problem{i} - title' for i in range(1, 2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
 
-    @unittest.skip('tbc')
-    def test_logging_on_with_correct_details_redirects_correctly(self):
-        data = {'username': 'user1', 'password': 'pass1'}
-        response = self.test_client.post('/', data=data, follow_redirects=False)
+    def test_html_from_first_page_next_link_with_language_filter_has_correct_links(self):
+        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(b'<a href="/logout" class="btn btn-light">Logout</a>' in response.data)
-        self.assertTrue(b'<a href="/create_solution" class="btn btn-light">Create Solution</a>' in response.data)
-        self.assertTrue(b'<a href="/update_solution" class="btn btn-light">Update Solution</a>' in response.data)
-        self.assertTrue(b'<a href="/delete_solution" class="btn btn-light">Delete Solution</a>' in response.data)
-
-    @unittest.skip('tbc')
-    def test_logout_logs_out_user(self):
-        data = {'username': 'user1', 'password': 'pass1'}
-        self.test_client.post('/', data=data, follow_redirects=True)
-        response = self.test_client.get('/logout', follow_redirects=True)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        next_link = soup.find(id="next_link")["href"]
+        response = self.test_client.get(next_link)
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(b'<a href="/logout" class="btn btn-light">Logout</a>' in response.data)
-        self.assertFalse(b'<a href="/create_solution" class="btn btn-light">Create Solution</a>' in response.data)
-        self.assertFalse(b'<a href="/update_solution" class="btn btn-light">Update Solution</a>' in response.data)
-        self.assertFalse(b'<a href="/delete_solution" class="btn btn-light">Delete Solution</a>' in response.data)
+        contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
+        self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
+        self.assertEqual(contents, [f'Problem{i} - title' for i in range(2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 4 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
