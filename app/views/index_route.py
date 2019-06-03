@@ -11,10 +11,10 @@ app_bp = Blueprint('app_bp', __name__)
 def index():
 
     # helper function to construct language filter form
-    def build_language_filter_form(language_filter):
-        choices = [(0, "No filter")]
-        for id, language in db.session.query(Language.language_id, Language.language).distinct():
-            choices.append((id, language))
+    def build_language_filter_form():
+        choices = [("", "No filter")]
+        for language in db.session.query(Language.language).distinct():
+            choices.append((language[0], language[0]))
         language_filter_form = LanguageFilterForm()
         language_filter_form.language_filter.choices = choices
         language_filter_form.language_filter.default = language_filter
@@ -40,10 +40,11 @@ def index():
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
-    language_filter = request.args.get('language_filter', 0, type=int)
+    language_filter = request.args.get('language_filter', "", type=str)
     if language_filter:
+        language_ids = [l.language_id for l in Language.query.filter_by(language=language_filter).all()]
         problem_solutions = Problem.query \
-                                   .filter_by(language_id=language_filter) \
+                                   .filter(Problem.language_id.in_(language_ids)) \
                                    .order_by('problem_id') \
                                    .paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
     else:
@@ -60,7 +61,7 @@ def index():
         problem_solutions.items.append(None)
 
     return render_template('index.html', problem_selection_form=problem_selection_form,
-            language_filter_form=build_language_filter_form(language_filter),
+            language_filter_form=build_language_filter_form(),
             login_form=login_form,
             problem_solutions=problem_solutions.items,
             next_url=next_url, prev_url=prev_url,

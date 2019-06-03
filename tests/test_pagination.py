@@ -83,7 +83,7 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(TestConfig.SOLUTIONS_TO_SHOW + 1, TestConfig.SOLUTIONS_TO_SHOW * 2 + 1)])
 
     def test_first_page_with_language_filter_has_correct_links(self):
-        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
+        response = self.test_client.get(f'/?language_filter={self.language1.language}')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, 'html.parser')
         contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
@@ -91,7 +91,7 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(1, 2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
 
     def test_html_from_first_page_next_link_with_language_filter_has_correct_links(self):
-        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
+        response = self.test_client.get(f'/?language_filter={self.language1.language}')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, 'html.parser')
         next_link = soup.find(id="next_link")["href"]
@@ -102,7 +102,6 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 4 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
 
-    @unittest.expectedFailure
     def test_filter_list_does_not_show_duplicate_languages(self):
         response = self.test_client.get('/')
         self.assertEqual(response.status_code, 200)
