@@ -91,6 +91,7 @@ class TestPagination(unittest.TestCase):
         next_link = soup.find(id="next_link")["href"]
         response = self.test_client.get(next_link)
         self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.data, 'html.parser')
         contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
         self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 4 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
