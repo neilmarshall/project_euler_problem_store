@@ -11,7 +11,7 @@ class TestConfig():
     WTF_CSRF_ENABLED = False
 
 
-class TestLandingPage(unittest.TestCase):
+class TestAccessToRestrictedPages(unittest.TestCase):
 
     def setUp(self):
         # establish application context and test client
