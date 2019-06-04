@@ -1,0 +1,43 @@
+{
+  "addons": [
+    "cleardb"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "CLEARDB_DATABASE_URL": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    },
+    "SQLALCHEMY_DATABASE_URI": {
+      "required": true
+    }
+  },
+  "formation": {
+    "downgrade": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    },
+    "upgrade": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    },
+    "migrate": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    },
+    "web": {
+      "quantity": 1,
+      "size": "Standard-1X"
+    }
+  },
+  "name": "project_euler_problem_store",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
