@@ -34,13 +34,19 @@ class TestPagination(unittest.TestCase):
         # add a Language object
         self.language1 = Language(language_id=1, language='Python', extension='py')
         self.language2 = Language(language_id=2, language='C++', extension='cpp')
-        db.session.add_all([self.language1, self.language2])
+        self.language3 = Language(language_id=3, language='F#', extension='fs')
+        self.language4 = Language(language_id=4, language='F#', extension='fsx')
+        db.session.add_all([self.language1, self.language2, self.language3, self.language4])
 
         # add Problem objects
         for _ in range(10):
             p1 = Problem(contents="contents", language_id=self.language1.language_id, title="title")
             p2 = Problem(contents="contents", language_id=self.language2.language_id, title="title")
             db.session.add_all([p1, p2])
+
+        f1 = Problem(contents='contents', language_id=self.language3.language_id, title='title')
+        f2 = Problem(contents='contents', language_id=self.language4.language_id, title='title')
+        db.session.add_all([f1, f2])
 
         db.session.commit()
 
@@ -77,7 +83,7 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(TestConfig.SOLUTIONS_TO_SHOW + 1, TestConfig.SOLUTIONS_TO_SHOW * 2 + 1)])
 
     def test_first_page_with_language_filter_has_correct_links(self):
-        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
+        response = self.test_client.get(f'/?language_filter={self.language1.language}')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, 'html.parser')
         contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
@@ -85,7 +91,7 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(1, 2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
 
     def test_html_from_first_page_next_link_with_language_filter_has_correct_links(self):
-        response = self.test_client.get(f'/?language_filter={self.language1.language_id}')
+        response = self.test_client.get(f'/?language_filter={self.language1.language}')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.data, 'html.parser')
         next_link = soup.find(id="next_link")["href"]
@@ -95,3 +101,10 @@ class TestPagination(unittest.TestCase):
         contents = [row.text.strip() for row in soup.find(id='links_table').find_all('tr')]
         self.assertEqual(len(contents), TestConfig.SOLUTIONS_TO_SHOW)
         self.assertEqual(contents, [f'Problem{i} - title' for i in range(2 * TestConfig.SOLUTIONS_TO_SHOW + 1, 4 * TestConfig.SOLUTIONS_TO_SHOW + 1, 2)])
+
+    def test_filter_list_does_not_show_duplicate_languages(self):
+        response = self.test_client.get('/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        options = [option.text for option in soup.find(id="language_filter").find_all("option")]
+        self.assertEqual(options, ['No filter', 'Python', 'C++', 'F#'])

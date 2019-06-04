@@ -25,6 +25,8 @@ class Language(db.Model):
     language = db.Column(db.String(16), nullable=False)
     extension = db.Column(db.String(16), nullable=False)
 
+    problems = db.relationship('Problem', backref='language')
+
     def __repr__(self):
         return f"Languages(language_id={self.language_id}, language='{self.language}', " + \
                f"extension='{self.extension}')"
