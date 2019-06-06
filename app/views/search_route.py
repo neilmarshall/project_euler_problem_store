@@ -1,3 +1,5 @@
+"""Routes controlling full-text search functionality"""
+
 from flask import Blueprint, redirect, render_template, request, url_for
 from app import db
 from app.models import Problem
@@ -6,6 +8,7 @@ search_bp = Blueprint('search_bp', __name__)
 
 @search_bp.route('/search')
 def search_router():
+    """Route controlling full-text search functionality"""
     search_for = request.args.get('search_for', None)
 
     if not search_for:
