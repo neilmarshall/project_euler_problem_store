@@ -1,3 +1,6 @@
+"""
+Application declaration and instantiation
+"""
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -13,6 +16,7 @@ from app.views.search_route import search_bp
 from config import Config
 
 def create_app(config_object=Config):
+    """Application Factory"""
 
     app = Flask(__name__)
     app.config.from_object(config_object)
@@ -25,4 +29,3 @@ def create_app(config_object=Config):
     app.register_blueprint(search_bp)
 
     return app
-
