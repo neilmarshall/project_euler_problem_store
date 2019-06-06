@@ -1,3 +1,5 @@
+"""Routes controlling updating existing solutions"""
+
 from flask import Blueprint, flash, render_template
 from flask_login import login_required
 from app import db
@@ -9,6 +11,8 @@ update_bp = Blueprint('update_bp', __name__)
 @update_bp.route('/update_solution', methods=['GET', 'POST'])
 @login_required
 def update_solution():
+    """Route controlling updating existing solutions"""
+
     # dynamically load allowed file extensions
     file_update_form = FileUpdateForm()
     for extension in db.session.query(Language.extension).all():
