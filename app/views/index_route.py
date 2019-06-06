@@ -1,3 +1,5 @@
+"""Routes controlling landing page and login / logout functionality"""
+
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_user, logout_user
 from app import db
@@ -9,6 +11,7 @@ app_bp = Blueprint('app_bp', __name__)
 @app_bp.route('/', methods=['GET', 'POST'])
 @app_bp.route('/index', methods=['GET', 'POST'])
 def index():
+    """Route controlling landing page"""
 
     # helper function to construct language filter form
     def build_language_filter_form():
@@ -32,11 +35,11 @@ def index():
     if login_form.validate_on_submit():
         username, password = login_form.data.get('username'), login_form.data.get('password')
         user = User.query.filter_by(username=username).first()
-        if not user or not user.check_password(password):
+        if user and user.check_password(password):
+            login_user(user, remember=True)
+        else:
             flash("Username not recognised or invalid password provided - please try again", "danger")
             return redirect(url_for('app_bp.index'))
-        else:
-            login_user(user, remember=True)
 
     # else have navigated directly to home page, or have been redirected
     page = request.args.get('page', 1, type=int)
@@ -53,33 +56,35 @@ def index():
                                    .paginate(page=page, per_page=current_app.config['SOLUTIONS_TO_SHOW'])
 
     next_url = url_for('app_bp.index', page=problem_solutions.next_num,
-            language_filter=language_filter) if problem_solutions.has_next else None
+                       language_filter=language_filter) if problem_solutions.has_next else None
     prev_url = url_for('app_bp.index', page=problem_solutions.prev_num,
-            language_filter=language_filter) if problem_solutions.has_prev else None
+                       language_filter=language_filter) if problem_solutions.has_prev else None
 
     while len(problem_solutions.items) < current_app.config['SOLUTIONS_TO_SHOW']:
         problem_solutions.items.append(None)
 
     return render_template('index.html', problem_selection_form=problem_selection_form,
-            language_filter_form=build_language_filter_form(),
-            login_form=login_form,
-            problem_solutions=problem_solutions.items,
-            next_url=next_url, prev_url=prev_url,
-            authenticated=current_user.is_authenticated)
+                           language_filter_form=build_language_filter_form(),
+                           login_form=login_form,
+                           problem_solutions=problem_solutions.items,
+                           next_url=next_url, prev_url=prev_url,
+                           authenticated=current_user.is_authenticated)
 
 
 @app_bp.route('/problem<problem_id>')
 def problem_renderer(problem_id):
+    """Route controlling rendering of problem solutions"""
     from_search = request.args.get('from_search') is not None and request.args['from_search'] == "true"
     solution = Problem.query.filter_by(problem_id=problem_id).first()
     if solution is None:
         flash("Solution does not exist - please try again", "warning")
         return redirect(url_for('app_bp.index'))
     return render_template('solution.html', problem_id=problem_id,
-            solution=solution.contents, from_search=from_search)
+                           solution=solution.contents, from_search=from_search)
 
 
 @app_bp.route('/logout')
 def logout():
+    """Route controlling logging out of users"""
     logout_user()
     return redirect(url_for('app_bp.index'))
