@@ -1,3 +1,5 @@
+"""Routes controlling creation of new solutions"""
+
 from flask import Blueprint, flash, render_template
 from flask_login import login_required
 from app import db
@@ -9,6 +11,8 @@ create_bp = Blueprint('create_bp', __name__)
 @create_bp.route('/create_solution', methods=['GET', 'POST'])
 @login_required
 def create_solution():
+    """Route controlling creation of new solutions"""
+
     # dynamically load allowed file extensions
     file_upload_form = FileUploadForm()
     for extension in db.session.query(Language.extension).all():
@@ -20,7 +24,8 @@ def create_solution():
 
         # check problem_id doesn't already exist
         if Problem.query.filter_by(problem_id=problem_id).first() is not None:
-            flash("A solution for that problem already exists - please specify an unsolved problem or update the solution", "warning")
+            flash("A solution for that problem already exists - please specify an unsolved "
+                  "problem or update the solution", "warning")
 
         else:
             title = file_upload_form.data.get('problem_title')
@@ -36,7 +41,7 @@ def create_solution():
                 language = Language.query.filter_by(extension=extension).first()
                 language_id = language.language_id
                 problem = Problem(problem_id=problem_id, contents=contents,
-                        language_id=language_id, title=title)
+                                  language_id=language_id, title=title)
                 db.session.add(problem)
                 db.session.commit()
                 flash("Solution created", "success")
