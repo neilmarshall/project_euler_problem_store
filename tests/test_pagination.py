@@ -4,20 +4,14 @@ from bs4 import BeautifulSoup
 
 from app import create_app, db
 from app.models import Language, Problem, User
-
-class TestConfig():
-    SECRET_KEY = "123456"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SOLUTIONS_TO_SHOW = 5
-    TESTING = True
-    WTF_CSRF_ENABLED = False
+from tests import TestConfig
 
 
 class TestPagination(unittest.TestCase):
 
     def setUp(self):
         # establish application context and test client
+        TestConfig.SOLUTIONS_TO_SHOW = 5
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context()
         self.app_context.push()
