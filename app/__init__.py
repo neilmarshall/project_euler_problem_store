@@ -6,6 +6,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+from config import Config
+
 db = SQLAlchemy()
 login = LoginManager()
 migrate = Migrate()
@@ -15,8 +17,6 @@ from app.views.create_route import create_bp
 from app.views.update_route import update_bp
 from app.views.delete_route import delete_bp
 from app.views.search_route import search_bp
-
-from config import Config
 
 def create_app(config_object=Config):
     """Application Factory"""
