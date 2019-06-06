@@ -1,3 +1,5 @@
+"""Routes controlling deletion of existing solutions"""
+
 from flask import Blueprint, flash, render_template
 from flask_login import login_required
 from app import db
@@ -9,6 +11,8 @@ delete_bp = Blueprint('delete_bp', __name__)
 @delete_bp.route('/delete_solution', methods=['GET', 'POST'])
 @login_required
 def delete_solution():
+    """Route controlling deletion of existing solutions"""
+
     file_delete_form = FileDeleteForm()
     if file_delete_form.validate_on_submit():
         problem_id = file_delete_form.data.get('problem_selection')
