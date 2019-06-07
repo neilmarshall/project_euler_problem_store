@@ -157,19 +157,3 @@ def update_solution():
                 flash("Solution updated", "success")
 
     return render_template('update_solution.html', file_update_form=file_update_form)
-
-
-@app_bp.route('/delete_solution', methods=['GET', 'POST'])
-@login_required
-def delete_solution():
-    file_delete_form = FileDeleteForm()
-    if file_delete_form.validate_on_submit():
-        problem_id = file_delete_form.data.get('problem_selection')
-        problem_to_delete = Problem.query.filter_by(problem_id=problem_id).first()
-        if problem_to_delete is None:
-            flash("Solution does not exist - please try again", "warning")
-        else:
-            db.session.delete(problem_to_delete)
-            db.session.commit()
-            flash("Solution deleted", "success")
-    return render_template('delete_solution.html', file_delete_form=file_delete_form)
