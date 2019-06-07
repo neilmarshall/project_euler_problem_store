@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_user, logout_user
 from app import db
-from app.forms import FileDeleteForm, FileUpdateForm, FileUploadForm, LanguageFilterForm, LoginForm, ProblemSelectionForm
+from app.forms import LanguageFilterForm, LoginForm, ProblemSelectionForm
 from app.models import Language, Problem, User
 
 app_bp = Blueprint('app_bp', __name__)
