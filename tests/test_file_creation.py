@@ -74,10 +74,12 @@ class TestFileCreation(unittest.TestCase):
         self.assertEqual(Problem.query.count(), 0)
 
     def test_uploading_file_without_content_does_not_add_file(self):
-        data = {'problem_selection': 1, 'problem_title': 'a title'}
+        data = {'problem_selection': 1, 'problem_title': 'a title',
+                'file_upload': (BytesIO(b''), 'test.py')}
         response = self.test_client.post('/create_solution', follow_redirects=True, data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Problem.query.count(), 0)
+        self.assertTrue("File must not be empty" in str(response.data, 'utf-8'))
 
     def test_uploading_file_with_duplicate_ID_does_not_add_file(self):
         data1 = {'problem_selection': 1, 'problem_title': 'title_1',
