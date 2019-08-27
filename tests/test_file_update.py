@@ -72,3 +72,11 @@ class TestFileUpdating(unittest.TestCase):
         self.assertEqual(db_problem.title, self.data['problem_title'])
         self.assertEqual(db_problem.contents, 'file contents')
         self.assertEqual(db_problem.language_id, self.language.language_id)
+
+    def test_updating_file_without_content_does_not_update_file(self):
+        data = {'problem_selection': 1, 'problem_title': 'a title',
+                'file_update': (BytesIO(b''), 'test.py')}
+        response = self.test_client.post('/update_solution', follow_redirects=True, data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Problem.query.count(), 1)
+        self.assertTrue("File must not be empty" in str(response.data, 'utf-8'))
