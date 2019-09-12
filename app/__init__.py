@@ -1,6 +1,8 @@
 """
 Application declaration and instantiation
 """
+import logging
+
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -23,6 +25,10 @@ def create_app(config_object=Config):
 
     app = Flask(__name__)
     app.config.from_object(config_object)
+
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
     db.init_app(app)
     login.init_app(app)
