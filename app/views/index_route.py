@@ -13,11 +13,13 @@ app_bp = Blueprint('app_bp', __name__)
 
 @app_bp.errorhandler(sqlalchemy.exc.OperationalError)
 def handler_error(e):
+    db.session.rollback()
     current_app.logger.error(e)
     return render_template('500error.html')
 
 @app_bp.errorhandler(MySQLdb._exceptions.OperationalError)
 def handler_error(e):
+    db.session.rollback()
     current_app.logger.error(e)
     return render_template('500error.html')
 
