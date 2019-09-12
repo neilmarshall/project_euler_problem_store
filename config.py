@@ -13,6 +13,8 @@ class Config():
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True, 'pool_recycle': 3600}
+    SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True,
+                                 'pool_recycle': 3600,
+                                 'echo_pool': True}
     SOLUTIONS_TO_SHOW = 12
     SQLALCHEMY_ECHO = True
