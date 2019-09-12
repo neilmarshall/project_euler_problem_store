@@ -6,7 +6,15 @@ from app import db
 from app.forms import LanguageFilterForm, LoginForm, ProblemSelectionForm
 from app.models import Language, Problem, User
 
+import sqlalchemy.exc
+
 app_bp = Blueprint('app_bp', __name__)
+
+@app_bp.errorhandler(sqlalchemy.exc.OperationalError)
+def handler_error(e):
+    current_app.logger.error(e)
+    return render_template('500error.html')
+
 
 @app_bp.route('/', methods=['GET', 'POST'])
 @app_bp.route('/index', methods=['GET', 'POST'])
