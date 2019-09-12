@@ -6,3 +6,5 @@ app/test_files/
 .env
 .idea
 backups/*
+.coverage
+htmlcov/*
