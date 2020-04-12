@@ -15,6 +15,8 @@ class Config():
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True,
                                  'pool_recycle': 3600,
-                                 'echo_pool': True}
+                                 'echo_pool': True,
+                                 'pool_size': 4}
     SOLUTIONS_TO_SHOW = 12
     SQLALCHEMY_ECHO = True
+    PROPAGATE_EXCEPTIONS = True
