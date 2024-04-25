@@ -12,7 +12,7 @@ Flask-Login==0.4.1
 Flask-Migrate==2.4.0
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
-gunicorn==19.9.0
+gunicorn==22.0.0
 idna==2.8
 ipython==7.16.3
 ipython-genutils==0.2.0
